@@ -14,12 +14,12 @@ To join this shared task, please register for the **Track 2: Sentence segmentati
 ## Evaluation
 
 - **Sentence segmentation**  
-The evaluation metrics for this task is adpated from the 2018 Universal Dependency Parsing Shared task, where we compared the sentence boundaries from the gold annotation
-Task  the performance in this subtask is evaluated using the F1 score. The "yes" label is treated as the positive class.
+The evaluation metrics for this task is adpated from the 2018 Universal Dependency Parsing Shared task, where we compared the sentence boundaries from the gold annotation. The `evaluation.py` Python script is our evaluation script.
+
 
 ## Annotations
 
-For each subtask, ground truth annotations are provided in csv format. Participants are required to submit their system outputs following the same format as the ground truth annotations provided by the organizers. A sample of the training set annotations is available at [`biocreative/sample`](biocreative/sample). Additionally, the annotation guideline of the corpus can be found at [`resources/annotation_gideline.doc`](resources/annotation_gideline.doc).
+For each subtask, ground truth annotations are provided in csv format. Participants are required to submit their system outputs following the same format as the ground truth annotations provided by the organizers. A sample of the training set annotations is available at [`data/biocreative/sample`](data/biocreative/sample). Additionally, the annotation guideline of the corpus can be found at [`data/biocreative/annotation_gideline.doc`](data/biocreative/annotation_gideline.doc).
 
 ## Corpus
 
@@ -43,7 +43,7 @@ The script requires three command-line arguments:
 - `--mimic_path`: The directory path containing the MIMIC-III v1.4 CSV files (`NOTEEVENTS.csv.gz`, `PRESCRIPTIONS.csv.gz` and `PATIENTS.csv.gz`).
 - `--output_path`: The file path where the processed corpus CSV will be saved.
 
-#### Command Syntax
+##### Command Syntax
 
 The script is executed from the command line with the following syntax:
 
