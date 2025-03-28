@@ -8,7 +8,7 @@ Sentence segmentation is a fundamental linguistic task widely used as a pre-proc
 
 ## Registration and Resources
 
-To join this shared task, please register for the **Track 2: Sentence segmentation of real-life clinical notes** through the [BioCreative IX Shared Task Registration Form](https://forms.gle/xbQp158cn5pgJ1oj9). Upon registration, participants will gain access to the full training, and validation.
+To join this shared task, please register for the **Track 2: Sentence segmentation of real-life clinical notes** through the [BioCreative IX Shared Task Registration Form](https://forms.gle/xbQp158cn5pgJ1oj9). Upon registration, participants will gain access to the full dataset and annotation guideline.
 
 
 ## Evaluation
@@ -19,13 +19,13 @@ The evaluation metrics for this task is adpated from the 2018 Universal Dependen
 
 ## Annotations
 
-For each subtask, ground truth annotations are provided in csv format. Participants are required to submit their system outputs following the same format as the ground truth annotations provided by the organizers. A sample of the training set annotations is available at [`data/biocreative/sample`](data/biocreative/sample). Additionally, the annotation guideline of the corpus can be found at [`data/biocreative/annotation_gideline.doc`](data/biocreative/annotation_gideline.doc).
+For each subtask, ground truth annotations are provided in csv format. Participants are required to submit their system outputs following the same format as the ground truth annotations provided by the organizers. A sample of the training set annotations is available at [`data/biocreative/sample`](data/biocreative/sample). Each annotation file is named using the ROW_ID of clinical notes from the MIMIC-III and includes information on sentence boundaries and types. There are two types of text chunks: Sentence and Unstructured. The distinction between these types is detailed in our annotation guidelines, which will be provided upon registration. Registered participants will have access to the full dataset and annotation guidelines.
 
 ## Corpus
 
 This shared task utilizes a corpus of clinical notes derived from the MIMIC-III Database.
 
-Participants are required to complete necessary training and sign a data usage agreement to access the [MIMIC-III Clinical Database (v1.4)](https://physionet.org/content/mimiciii/1.4/). After gaining access and downloading the files, participants must run the [`collect_notes_from_mimic.py`](text_mimic_notes.py) script to retrieve clinical notes and associated patient information using the provided note IDs. This process builds the corpus utilized in this shared task, as detailed in the instructions provided below.
+Participants are required to complete necessary training and sign a data usage agreement to access the [MIMIC-III Clinical Database (v1.4)](https://physionet.org/content/mimiciii/1.4/). After gaining access and downloading the files, participants must run the [`collect_notes_from_mimic.py`](collect_notes_from_mimic.py) script to retrieve clinical notes using the provided ROW_ID.
 
 ### MIMIC-III Notes Processing
 
