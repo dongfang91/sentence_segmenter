@@ -1,0 +1,52 @@
+# BioCreative IX @ IJCAI Track 2: Sentence segmentation of real-life clinical notes
+
+We invite researchers and practitioners to participate in the **Track 2: Sentence segmentation of real-life clinical notes** at the [**BioCreative IX @ IJCAI**](https://healthlanguageprocessing.org/clinical-sentence-segmentation/). This task focuses on developing automatic systems that can accurately segment clinical notes into sentences. This task requires participants to identify spans of each sentence.
+
+## Task Details
+
+Sentence segmentation is a fundamental linguistic task widely used as a pre-processing step in many NLP applications. While modern LLMs and sparse attention mechanisms in transformer networks have reduced the necessity of sentence-level inputs in some NLP tasks, many models are still designed and tested for shorter sequences. The need for sentence segmentation is particularly pronounced in clinical notes, as most clinical NLP tasks depend on this information for annotation and model training.
+
+## Registration and Resources
+
+To join this shared task, please register for the **Track 2: Sentence segmentation of real-life clinical notes** through the [BioCreative IX Shared Task Registration Form](https://forms.gle/xbQp158cn5pgJ1oj9). Upon registration, participants will gain access to the full training, and validation.
+
+
+## Evaluation
+
+- **Sentence segmentation**  
+The evaluation metrics for this task is adpated from the 2018 Universal Dependency Parsing Shared task, where we compared the sentence boundaries from the gold annotation
+Task  the performance in this subtask is evaluated using the F1 score. The "yes" label is treated as the positive class.
+
+## Annotations
+
+For each subtask, ground truth annotations are provided in csv format. Participants are required to submit their system outputs following the same format as the ground truth annotations provided by the organizers. A sample of the training set annotations is available at [`biocreative/sample`](biocreative/sample). Additionally, the annotation guideline of the corpus can be found at [`resources/annotation_gideline.doc`](resources/annotation_gideline.doc).
+
+## Corpus
+
+This shared task utilizes a corpus of clinical notes derived from the MIMIC-III Database.
+
+Participants are required to complete necessary training and sign a data usage agreement to access the [MIMIC-III Clinical Database (v1.4)](https://physionet.org/content/mimiciii/1.4/). After gaining access and downloading the files, participants must run the [`collect_notes_from_mimic.py`](text_mimic_notes.py) script to retrieve clinical notes and associated patient information using the provided note IDs. This process builds the corpus utilized in this shared task, as detailed in the instructions provided below.
+
+### MIMIC-III Notes Processing
+
+The `collect_notes_from_mimic.py` Python script is designed to retrieve clinical notes from the MIMIC-III clinical database. The script takes a text file containing note IDs, and return the raw clinical notes we used for this task.
+
+#### Requirements
+
+- Python 3.6 or higher
+- pandas library
+
+#### Usage
+
+The script requires three command-line arguments:
+- `--note_ids_path`: The file path to the text file containing the note IDs.
+- `--mimic_path`: The directory path containing the MIMIC-III v1.4 CSV files (`NOTEEVENTS.csv.gz`, `PRESCRIPTIONS.csv.gz` and `PATIENTS.csv.gz`).
+- `--output_path`: The file path where the processed corpus CSV will be saved.
+
+#### Command Syntax
+
+The script is executed from the command line with the following syntax:
+
+```bash
+python collect_notes_from_mimic.py --note_ids_path data/biocreative/sample/sample_row_id.txt  --mimic_path ./mimic-iii/1.4 --output_path data/biocreative/sample/sample_corpus.csv
+```
