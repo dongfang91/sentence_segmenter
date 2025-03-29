@@ -34,7 +34,7 @@ The script requires three command-line arguments:
 - `--output_path`: The file path where the processed corpus CSV will be saved.
 
 ##### Command Syntax
-```bash
+```
 python collect_notes_from_mimic.py --note_ids_path data/biocreative/sample/sample_row_id.txt  --mimic_path ./mimic-iii/1.4 --output_path data/biocreative/sample/sample_corpus.csv
 ```
 
@@ -48,27 +48,19 @@ The distinction between these types is detailed in our annotation guidelines, wh
 
 ## Evaluation
 
-The evaluation metrics for this task is adapted from the 2018 Universal Dependency Parsing Shared task, where we compared the sentence boundaries from the gold annotation. The `evaluation.py` Python script is our evaluation script.
+The evaluation metrics for this task is adapted from the 2018 Universal Dependency Parsing Shared task, where we compared the sentence boundaries from the gold annotation. The `evaluation.py` is our evaluation script.
 
 ### Script Usage
 The script requires two command-line arguments:
 - `--gold_dir`: Directory containing gold annotation CSV files
 - `--pred_dir`: Directory containing prediction CSV files
+- `--output_dir`: Directory saving evaluation scores
 
 #### Command Syntax
-```bash
-python evaluation.py --gold_dir data/biocreative/sample/annotation --pred_dir path/to/your/predictions
+```
+python evaluation.py --gold_dir data/biocreative/sample/annotation --pred_dir path/to/your/predictions --output_dir path/to/your/scores
 ```
 
-The script will:
-1. Load both gold annotations and predictions
-2. Verify that both sets contain the same files
-3. Calculate and display:
-   - Per-file precision, recall, and F1 scores
-   - Macro-average metrics (averaging per-file scores)
-   - Micro-average metrics (pooling all boundaries)
-
-#### Output Format
 The script outputs a formatted table showing:
 - Individual file performance
 - Macro-average metrics (precision, recall, F1)

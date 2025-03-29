@@ -2,6 +2,17 @@ import pandas as pd
 import os
 import argparse
 import numpy as np
+import logging
+import sys
+
+# Add logging configuration at the start of the file
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
 def load_annotations(annotation_dir):
     """
@@ -17,6 +28,9 @@ def load_annotations(annotation_dir):
     
     # Get all CSV files in the directory
     csv_files = [f for f in os.listdir(annotation_dir) if f.endswith('.csv')]
+    if len(csv_files) == 0:
+        logging.error(f"No CSV files found in {annotation_dir}")
+        sys.exit(1)
     
     for csv_file in csv_files:
         file_id = csv_file.replace('.csv', '')
@@ -64,107 +78,114 @@ def calculate_metrics(gold_boundaries, pred_boundaries):
     
     return precision, recall, f1, true_positives, len(gold_set), len(pred_set)
 
-def main(gold_annotation_dir, prediction_dir):
+
+def write_results_to_file(output_file, macro_metrics, micro_metrics):
+    """Write evaluation results to output file in SMM4H format"""
+    with open(output_file, 'w') as f:
+        # Write micro-average results first
+        f.write(f"micro_precision\t{micro_metrics['precision']:.4f}\n")
+        f.write(f"micro_recall\t{micro_metrics['recall']:.4f}\n")
+        f.write(f"micro_f1\t{micro_metrics['f1']:.4f}\n")
+        
+        # Write macro-average results
+        f.write(f"macro_precision\t{macro_metrics['precision']:.4f}\n")
+        f.write(f"macro_recall\t{macro_metrics['recall']:.4f}\n")
+        f.write(f"macro_f1\t{macro_metrics['f1']:.4f}\n")
+
+def main(gold_dir, pred_dir, output_dir):
     """
-    Main function to process note IDs and MIMIC-III notes into a sentence segmentation dataset.
+    Main function to process and evaluate sentence segmentation.
+    """
     
-    Args:
-        gold_annotation_dir (str): Directory Path containing gold annotations.
-        prediction_dir (str): Directory Path containing predictions.
-    """
+    
+    # Check if directories exist
+    if not os.path.exists(pred_dir):
+        logging.error(f"Prediction directory does not exist: {pred_dir}")
+        sys.exit(1)
+
     # Load gold annotations and predictions
-    gold_annotations = load_annotations(gold_annotation_dir)
-    predictions = load_annotations(prediction_dir)
+    predictions = load_annotations(pred_dir)
+    gold_annotations = load_annotations(gold_dir)
     
-    print(f"Loaded {len(gold_annotations)} gold annotation files")
-    print(f"Loaded {len(predictions)} prediction files")
+    logging.info(f"Loaded {len(predictions)} prediction files")
     
     # Check if both sets have the same files
-    gold_files = set(gold_annotations.keys())
     pred_files = set(predictions.keys())
-    
+    gold_files = set(gold_annotations.keys())
     if gold_files != pred_files:
-        error_msg = "Error: Gold annotations and predictions have different files!\n"
-        error_msg += f"Files only in gold annotations: {gold_files - pred_files}\n"
-        error_msg += f"Files only in predictions: {pred_files - gold_files}"
-        raise ValueError(error_msg)
+        error_msg = "Gold annotations and predictions have different files!"
+        error_msg += f"\nFiles only in gold annotations: {gold_files - pred_files}"
+        error_msg += f"\nFiles only in predictions: {pred_files - gold_files}"
+        logging.error(error_msg)
+        sys.exit(1)
     
-    # Calculate metrics for each file and for micro-average
-    total_precision = 0
-    total_recall = 0
-    total_f1 = 0
-    num_files = 0
+    # Initialize counters
+    total_precision = total_recall = total_f1 = 0
+    total_true_positives = total_gold_boundaries = total_pred_boundaries = 0
     
-    # For micro-average
-    total_true_positives = 0
-    total_gold_boundaries = 0
-    total_pred_boundaries = 0
-    
-    print("\nPer-file evaluation:")
-    print("-" * 80)
-    print(f"{'File ID':<15} {'Precision':<10} {'Recall':<10} {'F1 Score':<10}")
-    print("-" * 80)
+    logging.info("Starting evaluation...")
     
     for file_id in gold_files:
         gold_boundaries = gold_annotations[file_id]
         pred_boundaries = predictions[file_id]
         
-        precision, recall, f1, true_positives, gold_count, pred_count = calculate_metrics(gold_boundaries, pred_boundaries)
+        precision, recall, f1, true_positives, gold_count, pred_count = calculate_metrics(
+            gold_boundaries, pred_boundaries
+        )
         
-        print(f"{file_id:<15} {precision:<10.4f} {recall:<10.4f} {f1:<10.4f}")
-        
-        # For macro-average
+        # Update totals
         total_precision += precision
         total_recall += recall
         total_f1 += f1
-        num_files += 1
-        
-        # For micro-average
         total_true_positives += true_positives
         total_gold_boundaries += gold_count
         total_pred_boundaries += pred_count
     
-    # Calculate and print macro-average metrics
-    if num_files > 0:
-        macro_precision = total_precision / num_files
-        macro_recall = total_recall / num_files
-        macro_f1 = total_f1 / num_files
-        
-        # Calculate micro-average metrics
-        micro_precision = total_true_positives / total_pred_boundaries if total_pred_boundaries > 0 else 0
-        micro_recall = total_true_positives / total_gold_boundaries if total_gold_boundaries > 0 else 0
-        micro_f1 = 2 * (micro_precision * micro_recall) / (micro_precision + micro_recall) if (micro_precision + micro_recall) > 0 else 0
-        
-        print("-" * 80)
-        print("\nMacro-average metrics:")
-        print(f"{'Metric':<15} {'Score':<10}")
-        print("-" * 40)
-        print(f"{'Precision':<15} {macro_precision:<10.4f}")
-        print(f"{'Recall':<15} {macro_recall:<10.4f}")
-        print(f"{'F1 Score':<15} {macro_f1:<10.4f}")
-        
-        print("\nMicro-average metrics:")
-        print(f"{'Metric':<15} {'Score':<10}")
-        print("-" * 40)
-        print(f"{'Precision':<15} {micro_precision:<10.4f}")
-        print(f"{'Recall':<15} {micro_recall:<10.4f}")
-        print(f"{'F1 Score':<15} {micro_f1:<10.4f}")
-    else:
-        raise ValueError("No files found in the annotations!")
+    num_files = len(gold_files)
+    if num_files == 0:
+        logging.error("No files found in the annotations!")
+        sys.exit(1)
+    
+    # Calculate macro and micro metrics
+    macro_metrics = {
+        'precision': total_precision / num_files,
+        'recall': total_recall / num_files,
+        'f1': total_f1 / num_files
+    }
+    
+    micro_metrics = {
+        'precision': total_true_positives / total_pred_boundaries if total_pred_boundaries > 0 else 0,
+        'recall': total_true_positives / total_gold_boundaries if total_gold_boundaries > 0 else 0,
+        'f1': 0
+    }
+    
+    if (micro_metrics['precision'] + micro_metrics['recall']) > 0:
+        micro_metrics['f1'] = 2 * (micro_metrics['precision'] * micro_metrics['recall']) / (
+            micro_metrics['precision'] + micro_metrics['recall']
+        )
+    
+    # Create output filename
+    output_file = os.path.join(output_dir, 'scores.txt')
+    
+    # Write results to file
+    write_results_to_file(output_file, macro_metrics, micro_metrics)
+    logging.info(f"Results have been written to {output_file}")
+    
+    # Log the results
+    logging.info("\nResults:")
+    logging.info(f"Micro-average - P: {micro_metrics['precision']:.4f}, R: {micro_metrics['recall']:.4f}, F1: {micro_metrics['f1']:.4f}")
+    logging.info(f"Macro-average - P: {macro_metrics['precision']:.4f}, R: {macro_metrics['recall']:.4f}, F1: {macro_metrics['f1']:.4f}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Evaluate sentence segmentation results against gold annotations.')
-    parser.add_argument('--gold_dir', required=True, help='Directory containing gold annotation CSV files')
+    parser.add_argument('--gold_dir', required=True, help='Directory containing gold CSV files')
     parser.add_argument('--pred_dir', required=True, help='Directory containing prediction CSV files')
-    
+    parser.add_argument('--output_dir', required=True, help='Output file that contains evaluation scores.')
     args = parser.parse_args()
     
-    # Check if directories exist
-    if not os.path.exists(args.gold_dir):
-        raise ValueError(f"Gold annotation directory does not exist: {args.gold_dir}")
-    if not os.path.exists(args.pred_dir):
-        raise ValueError(f"Prediction directory does not exist: {args.pred_dir}")
+
     
-    main(args.gold_dir, args.pred_dir)
+    main(args.gold_dir, args.pred_dir, args.output_dir)
+    sys.exit(0)
     
     
