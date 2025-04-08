@@ -1,7 +1,0 @@
-sentence_id,sentence_type,sentence_start,sentence_end
-T1,Sentence,0,13
-T2,Sentence,15,36
-T3,Sentence,40,145
-T4,Sentence,146,256
-T5,Sentence,260,397
-T6,Sentence,401,471
