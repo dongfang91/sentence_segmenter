@@ -14,34 +14,31 @@ logging.basicConfig(
     ]
 )
 
-def load_annotations(annotation_dir):
+def load_annotations(annotation_file):
     """
-    Load annotations from CSV files in the specified directory.
+    Load annotations from a single combined CSV file.
     
     Args:
-        annotation_dir (str): Directory path containing annotations in CSV format
+        annotation_file (str): Path to the combined annotations CSV file
         
     Returns:
         dict: Dictionary mapping file IDs to their sentence boundaries
     """
     annotations = {}
     
-    # Get all CSV files in the directory
-    csv_files = [f for f in os.listdir(annotation_dir) if f.endswith('.csv')]
-    if len(csv_files) == 0:
-        logging.error(f"No CSV files found in {annotation_dir}")
+    # Check if file exists
+    if not os.path.exists(annotation_file):
+        logging.error(f"Annotation file not found: {annotation_file}")
         sys.exit(1)
     
-    for csv_file in csv_files:
-        file_id = csv_file.replace('.csv', '')
-        file_path = os.path.join(annotation_dir, csv_file)
-        
-        # Read the CSV file
-        df = pd.read_csv(file_path)
-        
-        # Extract sentence boundaries
+    # Read the combined CSV file
+    df = pd.read_csv(annotation_file)
+    
+    # Group by file_id
+    for file_id, group in df.groupby('file_id'):
+        # Extract sentence boundaries for each file
         sentence_boundaries = []
-        for _, row in df.iterrows():
+        for _, row in group.iterrows():
             if row['sentence_type'] == 'Sentence':
                 start = row['sentence_start']
                 end = row['sentence_end']
