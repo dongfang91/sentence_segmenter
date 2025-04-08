@@ -4,7 +4,7 @@ We invite researchers and practitioners to participate in the **Track 2: Sentenc
 
 ## Task Details
 
-Sentence segmentation is a fundamental linguistic task widely used as a pre-processing step in many NLP applications. While modern LLMs and sparse attention mechanisms in transformer networks have reduced the necessity of sentence-level inputs in some NLP tasks, many models are still designed and tested for shorter sequences. The need for sentence segmentation is particularly pronounced in clinical notes, as most clinical NLP tasks depend on this information for annotation and model training. In 2024, we introduced a  **[baseline system](https://aclanthology.org/2024.emnlp-main.1156.pdf)** for sentence segmentation that outperformed several standard tools, such as Stanza, SpaCy, and Trankit. To foster further innovation in sentence segmentation techniques, we organized a shared task as part of the BioCreative 9 workshop.
+Sentence segmentation is a fundamental linguistic task widely used as a pre-processing step in many NLP applications. While modern LLMs and sparse attention mechanisms in transformer networks have reduced the necessity of sentence-level inputs in some NLP tasks, many models are still designed and tested for shorter sequences. The need for sentence segmentation is particularly pronounced in clinical notes, as most clinical NLP tasks depend on this information for annotation and model training. In 2024, we introduced a  **[baseline system](https://aclanthology.org/2024.emnlp-main.1156.pdf)** for sentence segmentation that outperformed several standard tools, such as Stanza, SpaCy, and Trankit. To foster further innovation in sentence segmentation techniques, we organized a shared task as part of the BioCreative 9 workshop. 
 
 ## Registration and Resources
 
@@ -65,3 +65,6 @@ The script outputs a formatted table showing:
 - Individual file performance
 - Macro-average metrics (precision, recall, F1)
 - Micro-average metrics (precision, recall, F1)
+
+## Submission
+Please submit your system predictions at [Codebench]https://www.codabench.org/competitions/7178)
