@@ -67,4 +67,4 @@ The script outputs a formatted table showing:
 - Micro-average metrics (precision, recall, F1)
 
 ## Submission
-Please submit your system predictions at [Codebench]https://www.codabench.org/competitions/7178)
+Please submit your system predictions at [Codebench](https://www.codabench.org/competitions/7178)
