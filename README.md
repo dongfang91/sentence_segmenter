@@ -68,3 +68,6 @@ The script outputs a formatted table showing:
 
 ## Submission
 Please submit your system predictions at [Codebench](https://www.codabench.org/competitions/7178)
+
+## Baseline system
+Baseline system is available at [`baseline/SliderSplit.py`](baseline/SliderSplit.py)
