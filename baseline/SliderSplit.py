@@ -133,7 +133,6 @@ def get_token_length(token):
     return 1 if token == '<newline>' else len(token)
 
 def segment_sentences(text, model_name="dongfangxu/SentenceSegmenter-MIMIC"):
-# def segment_sentences(text, model_name="/Users/xud/Projects/clinical-sentence-segmentation/data/models/mimic/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext/mimic_processed_su_pubmedbert_500_complete/checkpoint-810"):
     """
     Segment a text into sentences using a BIO tagging model.
     

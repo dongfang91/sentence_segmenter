@@ -3,7 +3,8 @@
 ## Description
 This script [`SliderSplit.py`](SliderSplit.py) is used for sentence segmentation of MIMIC-III notes. It takes the clinical text as input and predict BIO tagging, where B indicates the Beginning of a sentence, I represents Inside of a sentence, and O denotes Outside of a sentence. More details of this model is in the paper [Automatic sentence segmentation of clinical record narratives in real-world data](https://aclanthology.org/2024.emnlp-main.1156/).
 
-The model used in the script is based on [microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext](https://huggingface.co/microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext), and we trained on MIMIC-III notes for a sequence labeling (token classification) task.
+The model used in the script is at [dongfangxu/SentenceSegmenter-MIMIC](https://huggingface.co/dongfangxu/SentenceSegmenter-MIMIC).
+
 
 #### Script Usage
 The script contains a segmenter function to segment the clinical text 
