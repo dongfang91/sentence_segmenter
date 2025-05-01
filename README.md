@@ -25,7 +25,7 @@ This shared task utilizes a corpus of clinical notes derived from the MIMIC-III 
 
 ### Accessing MIMIC-III Notes
 
-Participants are required to complete necessary training and sign a data usage agreement to access the [MIMIC-III Clinical Database (v1.4)](https://physionet.org/content/mimiciii/1.4/). After gaining access and downloading the files, participants must run the [`collect_notes_from_mimic.py`](collect_notes_from_mimic.py) script to retrieve clinical notes using the provided ROW_ID.
+Participants are required to complete necessary training and sign a data usage agreement to access the [MIMIC-III Clinical Database (v1.4)](https://physionet.org/content/mimiciii/1.4/). After gaining access and downloading 'NOTEEVENTS.csv.gz' and row_id files from the google drive (downloading link is provided in the google group), participants must run the [`collect_notes_from_mimic.py`](collect_notes_from_mimic.py) script to retrieve clinical notes using the provided ROW_ID.
 
 #### Script Usage
 The script requires three command-line arguments:
